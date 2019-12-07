@@ -1,0 +1,27 @@
+Package: footyr
+Type: Package
+Title: R package to obtain data and statistics about football (soccer) from ISport API
+Version: 0.1.0
+Authors@R: person("Timothy", "Young", email = "timothyyoung@live.com.sg",
+  role = c("aut", "cre"))
+Description: Allows users to easily access data from the ISport API through various 
+    functions. Access data on over 1500 leagues/cups worldwide. Get info on team 
+    standings, player statistics.
+License: MIT + file LICENSE
+Maintainer: Timothy Young <timothyyoung@live.com.sg>
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    dplyr,
+    httr,
+    jsonlite,
+    magrittr,
+    stringr,
+    tibble,
+    tidyr,
+    utils
+RoxygenNote: 6.1.1
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

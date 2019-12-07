@@ -1,0 +1,63 @@
+"0","```r
+ID <- function(league_name, team_name = NA) {
+  leagues_url <- str_c(\"http://api.isportsapi.com/sport/football/league/basic?api_key=\", Sys.getenv(\"ISPORT_KEY\"))
+  leagues <- GET(leagues_url)
+  
+  if (leagues$status_code != 200) {
+    stop (\"Error when calling API. Response: \", content(leagues))
+  }
+  
+  leagues1 <- fromJSON(toJSON(content(leagues)))
+  leagues_df <- as.data.frame(leagues1) %>%
+    flatten() %>%
+    unnest(cols = c(data.leagueId, data.name, data.shortName, data.type, data.subLeagueName))
+  
+  leagues_df <- leagues_df %>%
+  select(LeagueID = data.leagueId, League_Name = data.name, 
+         League_Shortform = data.shortName, Sub_League_Name = data.subLeagueName)
+  
+  league_detect <- str_detect(leagues_df$League_Name, league_name)
+  
+  if (any(league_detect) == TRUE) {
+    leagues_df <- leagues_df %>%
+      filter(League_Name == league_name)
+    league_info <- leagues_df[,1:2]
+  } else {
+    stop(\"You may have mispelt your league/cup name. Please try again with the correct league/cup name\")
+  }
+
+  print(league_info)
+  
+  if(is.na(team_name) == FALSE) {
+   league_id2 <- league_info[,1]
+   leagues_url2 <- str_c(\"http://api.isportsapi.com/sport/football/team?leagueId=\", 
+                         league_id2, \"&api_key=\", Sys.getenv(\"ISPORT_KEY\"))
+   leagues2_query <- GET(leagues_url2)
+   leagues2 <- fromJSON(toJSON(content(leagues2_query)))
+   leagues2_df <- as.data.frame(leagues2) %>%
+     flatten() %>%
+     unnest(cols = c(data.teamId, data.leagueId, data.name, data.logo, data.foundingDate, 
+                     data.address, data.area, data.venue, data.capacity, data.coach,
+                     data.website))
+   leagues2_df <- leagues2_df %>%
+     select(TeamID = data.teamId, Team_Name = data.name)
+   
+   team_detect <- str_detect(leagues2_df$Team_Name, team_name)
+   
+   if (any(team_detect) == TRUE) {
+     
+    leagues2_df <- leagues2_df %>%
+      filter(Team_Name == team_name)
+    team_info <- leagues2_df[, 1:2]
+   } else {
+    stop(\"You may have mispelt your team name OR Your team does not play in this league. Please try again with the correct team name\")
+   }
+   print(team_info)
+  }
+  
+  
+  
+}
+
+ID(\"English Premier League\", \"Arsenal\")
+```"
