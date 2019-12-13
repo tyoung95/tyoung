@@ -23,6 +23,7 @@ There are several required packages that need to be used as dependencies for `fo
 * [dplyr](https://cran.r-project.org/web/packages/dplyr/index.html)
 * [httr](https://cran.r-project.org/web/packages/httr/index.html)
 * [jsonlite](https://cran.r-project.org/web/packages/jsonlite/index.html)
+* [magick](https://cran.r-project.org/web/packages/magick/index.html)
 * [magrittr](https://cran.r-project.org/web/packages/magrittr/index.html)
 * [stringr](https://cran.r-project.org/web/packages/stringr/index.html)
 * [tibble](https://cran.r-project.org/web/packages/tibble/index.html)
