@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Timothy Young" />
+
+<meta name="date" content="2019-12-12" />
+
+<title>A tutorial on using the footyr package</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">A tutorial on using the footyr package</h1>
+<h4 class="author">Timothy Young</h4>
+<h4 class="date">2019-12-12</h4>
+
+
+
+<div id="welcome" class="section level2">
+<h2>Welcome!</h2>
+<p>This page will teach you the basics and workings of using the <code>footyr</code> package in R. This package will make calls to the ISport API and in particular will call on the football (soccer) information from the ISport API. The API also has information for basketball, but this vignette will focus on football. Using the functions contained within this package, we can easily pull data about teams, players, leagues/cup competitions, statistics from around the world.</p>
+</div>
+<div id="about-the-isport-api" class="section level2">
+<h2>About the ISport API</h2>
+<p>The <a href="https://www.isportsapi.com">ISport API</a> provides data for more than 1600 football leagues and cups, and matches from over 110 countries.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> We are able to access live scores, player lineups, match schedules, player information and odds by utilising this API, and the company has been dedicated to sport for 12 years now.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
+<p>The iSports API’s security is through the use of a registered API key, which will be received upon sign-up. The output of the API is in JSON format. The API is mostly a paid API, but it allows for a 15 day free trial period, limited to 10,000 calls per day/endpoint, and a 2 min delay for live data. You may register for the API <a href="https://www.isportsapi.com/auth/register">here.</a></p>
+<p>You may also find in-depth <a href="https://www.isportsapi.com/docs.html">documentation</a> about the API on ISport’s website.</p>
+</div>
+<div id="overview-of-functions" class="section level2">
+<h2>Overview of functions</h2>
+<p>footyr(0.1.0) contains 5 functions, all of which help to call and parse data from the API. The core functions all start with <code>my</code> to differentiate them.</p>
+<ul>
+<li><code>ID()</code> to retrieve unique ID numbers for leagues and teams for further use in the package.</li>
+<li><code>myleague()</code> retrieves data on football leagues/cups, including the league standing tables.</li>
+<li><code>myplayer()</code> retreives data on squads, and player statistics.</li>
+<li><code>myteam()</code> retrieves overview statistics on teams, past result and future fixture listings.</li>
+<li><code>mytopstats()</code> retrieves league statistics of top players within the league</li>
+</ul>
+<div id="loading-the-package" class="section level3">
+<h3>Loading the package</h3>
+<p>Having installed the <code>footyr</code> package, let us load it.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co">#Load the package </span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(footyr)</a></code></pre></div>
+</div>
+<div id="loading-your-api-key" class="section level3">
+<h3>Loading your API key</h3>
+<p>Having registered online and received your API key, you need to then store your API key in your REnviron. This is important as you will not be able to perform calls to the API without the key, and as this key is unique to you, you would need to keep it secret, much like a password.</p>
+<p><strong>Important</strong>: <em>You should store your API key under the name “ISPORT_KEY”. This is crucial as this package relies on this.</em></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#Use this to set your API key, replacing &quot;YOUR_API_KEY&quot; with your actual key.</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">Sys.setenv</span>(<span class="st">&quot;ISPORT_KEY&quot;</span> =<span class="st"> &quot;YOUR_API_KEY&quot;</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#Check your key</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">Sys.getenv</span>(<span class="st">&quot;ISPORT_KEY&quot;</span>)</a></code></pre></div>
+</div>
+<div id="retrieve-id-numbers-with-id" class="section level3">
+<h3>Retrieve ID numbers with <code>ID()</code></h3>
+<p>This first function is basic, but is one of the most important in this package. It allows us to search leagues and teams by their names, and retrieve their ID numbers. These associated ID numbers are necessary, as the other functions in the package will make use of these ID numbers.</p>
+<p>In this vignette we will be mostly using the English Premier League (EPL) and Arsenal as an example. Here we retrieve the ID numbers for them:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">ID</span>(<span class="dt">league_name =</span> <span class="st">&quot;English Premier League&quot;</span>, <span class="dt">team_name =</span> <span class="st">&quot;Arsenal&quot;</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt; # A tibble: 1 x 2</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt;   LeagueID League_Name           </span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;                 </span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; 1 1639     English Premier League</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; # A tibble: 1 x 2</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt;   TeamID Team_Name</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;    </span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; 1 19     Arsenal</span></a></code></pre></div>
+<p>We can also just retrieve the league ID number without specifying a team. Here with the Spanish La Liga:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">ID</span>(<span class="dt">league_name =</span> <span class="st">&quot;Spanish La Liga&quot;</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; # A tibble: 1 x 2</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;   LeagueID League_Name    </span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          </span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; 1 1134     Spanish La Liga</span></a></code></pre></div>
+</div>
+<div id="retrieve-league-data-and-standing-tables-with-myleague" class="section level3">
+<h3>Retrieve league data and standing tables with <code>myleague()</code></h3>
+<p>This function that allows you to retrieve key information on football leagues/cups, including the league standing tables.</p>
+<p>Let us retrieve information on the English Premier League (EPL), specifying the league ID code in the first argument (1639).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">myleague</span>(<span class="dt">leagueID =</span> <span class="dv">1639</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; Calling http://api.isportsapi.com/sport/football/standing/league?leagueId=1639&amp;api_key=xEtVbN8zEFnioBkd</span></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; SuccessOKSuccess: (200) OK</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; # A tibble: 1 x 6</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt;   LeagueID Name      Abbreviation Total_Rounds Current_Round Current_Season</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt;   &lt;fct&gt;    &lt;fct&gt;     &lt;fct&gt;               &lt;int&gt;         &lt;int&gt; &lt;fct&gt;         </span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; 1 1639     English … ENG PR                 38            14 2019-2020</span></a></code></pre></div>
+<p>Let us also view the current league table for the EPL with the <code>table</code> argument.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">myleague</span>(<span class="dt">leagueID =</span> <span class="dv">1639</span>, <span class="dt">table =</span> <span class="st">&quot;no&quot;</span>)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">#&gt; Calling http://api.isportsapi.com/sport/football/standing/league?leagueId=1639&amp;api_key=xEtVbN8zEFnioBkd</span></a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt; SuccessOKSuccess: (200) OK</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; # A tibble: 1 x 6</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt;   LeagueID Name      Abbreviation Total_Rounds Current_Round Current_Season</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt;   &lt;fct&gt;    &lt;fct&gt;     &lt;fct&gt;               &lt;int&gt;         &lt;int&gt; &lt;fct&gt;         </span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; 1 1639     English … ENG PR                 38            14 2019-2020</span></a></code></pre></div>
+</div>
+<div id="retrieve-football-team-information-and-pastfuture-fixtures-with-myteam" class="section level3">
+<h3>Retrieve football team information and past/future fixtures with <code>myteam()</code></h3>
+<p>This function that allows you to retrieve key statistics on a football team of your choice, including past results and future fixtures and club logo.</p>
+<p>Let us then retrieve information on Arsenal FC, using the arguments <code>leagueID = 1639</code> (Remember that ID 1639 corresponds to the EPL) and <code>team_name = &quot;Arsenal&quot;</code></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">myteam</span>(<span class="dt">leagueID =</span> <span class="dv">1639</span>, <span class="dt">team_name =</span> <span class="st">&quot;Arsenal&quot;</span>)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; Calling http://api.isportsapi.com/sport/football/team?leagueId=1639&amp;teamId=19&amp;api_key=xEtVbN8zEFnioBkd</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt; # A tibble: 1 x 9</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt;   TeamID LeagueID Club_Name Founding_Date Area  Stadium Stadium_Capacity</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;              &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; 1 19     1639     Arsenal   1886-1-1      Lond… Emirat…            60361</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; # … with 2 more variables: Manager &lt;chr&gt;, Website &lt;chr&gt;</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; # A tibble: 1 x 7</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt;   format width height colorspace matte filesize density</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt;      &lt;lgl&gt;    &lt;int&gt; &lt;chr&gt;  </span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt; 1 JPEG     160    160 sRGB       FALSE     6313 72x72</span></a></code></pre></div>
+<p>Let us now choose to include the past 6 results for Arsenal, by specifying the <code>past_results</code> argument to “yes”. We can see these results appended to the end of the dataframe.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">myteam</span>(<span class="dt">leagueID =</span> <span class="dv">1639</span>, <span class="dt">team_name =</span> <span class="st">&quot;Arsenal&quot;</span>, <span class="dt">past_results =</span> <span class="st">&quot;yes&quot;</span>)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">#&gt; Calling http://api.isportsapi.com/sport/football/team?leagueId=1639&amp;teamId=19&amp;api_key=xEtVbN8zEFnioBkd</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; # A tibble: 1 x 15</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">#&gt;   TeamID LeagueID Club_Name Founding_Date Area  Stadium Stadium_Capacity</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;              &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">#&gt; 1 19     1639     Arsenal   1886-1-1      Lond… Emirat…            60361</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">#&gt; # … with 8 more variables: Manager &lt;chr&gt;, Website &lt;chr&gt;, `1` &lt;fct&gt;,</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">#&gt; #   `2` &lt;fct&gt;, `3` &lt;fct&gt;, `4` &lt;fct&gt;, `5` &lt;fct&gt;, `6` &lt;fct&gt;</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">#&gt; # A tibble: 1 x 7</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">#&gt;   format width height colorspace matte filesize density</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt;      &lt;lgl&gt;    &lt;int&gt; &lt;chr&gt;  </span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">#&gt; 1 JPEG     160    160 sRGB       FALSE     6313 72x72</span></a></code></pre></div>
+<p>Now, let us also look at the next 5 fixtures that Arsenal are due to play in the future. We make use of the <code>future</code> argument, and set it to 5. We can change how many future fixtures we want to view by changing the number, say <code>future = 10</code> if we want to view the next 10 fixtures for example.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">myteam</span>(<span class="dt">leagueID =</span> <span class="dv">1639</span>, <span class="dt">team_name =</span> <span class="st">&quot;Arsenal&quot;</span>, <span class="dt">past_results =</span> <span class="st">&quot;yes&quot;</span>, <span class="dt">future =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt; Calling http://api.isportsapi.com/sport/football/team?leagueId=1639&amp;teamId=19&amp;api_key=xEtVbN8zEFnioBkd</span></a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; # A tibble: 1 x 15</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt;   TeamID LeagueID Club_Name Founding_Date Area  Stadium Stadium_Capacity</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt;     &lt;chr&gt;         &lt;chr&gt; &lt;chr&gt;              &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; 1 19     1639     Arsenal   1886-1-1      Lond… Emirat…            60361</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; # … with 8 more variables: Manager &lt;chr&gt;, Website &lt;chr&gt;, `1` &lt;fct&gt;,</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; #   `2` &lt;fct&gt;, `3` &lt;fct&gt;, `4` &lt;fct&gt;, `5` &lt;fct&gt;, `6` &lt;fct&gt;</span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt; # A tibble: 1 x 7</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;   format width height colorspace matte filesize density</span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt;      &lt;lgl&gt;    &lt;int&gt; &lt;chr&gt;  </span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt; 1 JPEG     160    160 sRGB       FALSE     6313 72x72</span></a>
+<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt; Calling http://api.isportsapi.com/sport/football/schedule?leagueId=1639&amp;api_key=xEtVbN8zEFnioBkd</span></a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt; # A tibble: 5 x 5</span></a>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt;   MatchID   League_Name         Home         Away             Location     </span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="co">#&gt;   &lt;chr&gt;     &lt;chr&gt;               &lt;chr&gt;        &lt;chr&gt;            &lt;chr&gt;        </span></a>
+<a class="sourceLine" id="cb9-17" data-line-number="17"><span class="co">#&gt; 1 241812714 English Premier Le… Arsenal      Brighton   Hove… Emirates Sta…</span></a>
+<a class="sourceLine" id="cb9-18" data-line-number="18"><span class="co">#&gt; 2 233812715 English Premier Le… West Ham Un… Arsenal          Boleyn Ground</span></a>
+<a class="sourceLine" id="cb9-19" data-line-number="19"><span class="co">#&gt; 3 243812716 English Premier Le… Arsenal      Manchester City  &quot;&quot;           </span></a>
+<a class="sourceLine" id="cb9-20" data-line-number="20"><span class="co">#&gt; 4 374812710 English Premier Le… Everton      Arsenal          &quot;&quot;           </span></a>
+<a class="sourceLine" id="cb9-21" data-line-number="21"><span class="co">#&gt; 5 255812719 English Premier Le… Bournemouth… Arsenal          &quot;&quot;</span></a></code></pre></div>
+</div>
+<div id="retrieve-squad-information-of-your-football-team-with-myplayer" class="section level3">
+<h3>Retrieve squad information of your football team with <code>myplayer()</code></h3>
+<p>This function that allows you to retrieve squad statistics of a football team of your choice, including individual player and coaching staff statistics.</p>
+<p>Let us once again retrieve squad information on the team Arsenal, who play in the EPL, specifying the team ID code (19) in the first argument <code>teamID</code>. We get the output in the form of a dataframe containing information of the entire squad in Arsenal.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">myplayer</span>(<span class="dt">teamID =</span> <span class="dv">19</span>)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt; # A tibble: 33 x 13</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt;    TeamID PlayerID Name  Birthday Height Country Dominant_Foot Weight Value</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;     &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;          &lt;int&gt; &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt;  1 19     171322   Buka… &quot;&quot;            0 &quot;&quot;      &quot;&quot;                 0     0</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="co">#&gt;  2 19     60220    Alex… 1991-05…    176 France  Right             73  6300</span></a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="co">#&gt;  3 19     67879    Shko… 1992-04…    184 Germany Right             73  1620</span></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="co">#&gt;  4 19     79200    Gran… 1992-09…    186 Switze… Left              70  3600</span></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="co">#&gt;  5 19     64796    Pier… 1989-06…    187 Gabon   Right             75  6300</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="co">#&gt;  6 19     59595    Sokr… 1988-06…    186 Greece  Right             82  1800</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#&gt;  7 19     87969    Bern… 1992-03…    189 Germany Right             79  2700</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="co">#&gt;  8 19     59933    Mesu… 1988-10…    180 Germany Left              73  2250</span></a>
+<a class="sourceLine" id="cb10-13" data-line-number="13"><span class="co">#&gt;  9 19     96297    Sead… 1993-06…    183 Bosnia… Left              82  1800</span></a>
+<a class="sourceLine" id="cb10-14" data-line-number="14"><span class="co">#&gt; 10 19     67908    Davi… 1987-04…    189 Brazil  Right             84  1800</span></a>
+<a class="sourceLine" id="cb10-15" data-line-number="15"><span class="co">#&gt; # … with 23 more rows, and 4 more variables: Player_Position &lt;chr&gt;,</span></a>
+<a class="sourceLine" id="cb10-16" data-line-number="16"><span class="co">#&gt; #   Jersey_Number &lt;int&gt;, Contract_Expiry &lt;chr&gt;, Photo &lt;chr&gt;</span></a></code></pre></div>
+<p>We can also search for a particular player in the Arsenal team, by using the second argument <code>player_name</code>, input the player name as a string in this second argument. This provides a singular response corresponding to the player you choose and containing information about that player. Here we look for the player called “Mesut Ozil”. You can also get a picture of the player in the Viewer tab of RStudio.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">myplayer</span>(<span class="dt">teamID =</span> <span class="dv">19</span>, <span class="dt">player_name =</span> <span class="st">&quot;Mesut Ozil&quot;</span>)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="co">#&gt; # A tibble: 1 x 13</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt;   TeamID PlayerID Name  Birthday Height Country Dominant_Foot Weight Value</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;     &lt;int&gt; &lt;chr&gt;   &lt;chr&gt;          &lt;int&gt; &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; 1 19     59933    Mesu… 1988-10…    180 Germany Left              73  2250</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; # … with 4 more variables: Player_Position &lt;chr&gt;, Jersey_Number &lt;int&gt;,</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; #   Contract_Expiry &lt;chr&gt;, Photo &lt;chr&gt;</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt; # A tibble: 1 x 7</span></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt;   format width height colorspace matte filesize density</span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt;   &lt;chr&gt;  &lt;int&gt;  &lt;int&gt; &lt;chr&gt;      &lt;lgl&gt;    &lt;int&gt; &lt;chr&gt;  </span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt; 1 PNG      129    180 sRGB       FALSE    40001 72x72</span></a></code></pre></div>
+<p><img src="data:image/png;base64,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" width="129" /></p>
+</div>
+<div id="retrieve-data-and-statistics-of-leagues-best-players-with-mytopstats" class="section level3">
+<h3>Retrieve data and statistics of leagues’ best players with <code>mytopstats()</code></h3>
+<p>This function that allows you to retrieve complete statistics of the top players within a league, including additional stats not natively from the ISports API.</p>
+<p>Looking once again at the EPL, we specify the <code>leagueID = 1639</code> and looking at players with the most goals, we specify <code>&quot;Goals&quot;</code> in the second argument <code>stat</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">mytopstats</span>(<span class="dt">leagueID =</span> <span class="dv">1639</span>, <span class="dt">stat =</span> <span class="st">&quot;Goals&quot;</span>)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt; # A tibble: 10 x 11</span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt;    PlayerID Player_Name Team_Name Season Total_Goals Total_Apps Total_Mins</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;        &lt;int&gt;      &lt;int&gt;      &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt;  1 90249    Jamie Vardy Leiceste… 2019-…          11         10        900</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt;  2 143781   Tammy Abra… Chelsea   2019-…          10         10        736</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt;  3 22770    Sergio Leo… Manchest… 2019-…           9          9        575</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt;  4 99201    Sadio Mane  Liverpool 2019-…           8          9        773</span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="co">#&gt;  5 64796    Pierre-Eme… Arsenal   2019-…           8         10        900</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="co">#&gt;  6 84385    Raheem Ste… Manchest… 2019-…           7          9        792</span></a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#&gt;  7 139273   Marcus Ras… Manchest… 2019-…           7         10        860</span></a>
+<a class="sourceLine" id="cb12-12" data-line-number="12"><span class="co">#&gt;  8 69793    Harry Kane  Tottenha… 2019-…           7         10        895</span></a>
+<a class="sourceLine" id="cb12-13" data-line-number="13"><span class="co">#&gt;  9 76898    Danny Ings  Southamp… 2019-…           6         10        578</span></a>
+<a class="sourceLine" id="cb12-14" data-line-number="14"><span class="co">#&gt; 10 100443   Mohamed Sa… Liverpool 2019-…           6          9        794</span></a>
+<a class="sourceLine" id="cb12-15" data-line-number="15"><span class="co">#&gt; # … with 4 more variables: Total_Shots &lt;int&gt;, Total_Shots_Target &lt;int&gt;,</span></a>
+<a class="sourceLine" id="cb12-16" data-line-number="16"><span class="co">#&gt; #   Total_Assists &lt;int&gt;, Total_Key_Passes &lt;int&gt;</span></a></code></pre></div>
+<p>As an additional example, we can look at players in the Spanish La Liga, ranked by those with the most assists.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">mytopstats</span>(<span class="dt">leagueID =</span> <span class="dv">1134</span>, <span class="dt">stat =</span> <span class="st">&quot;Assists&quot;</span> )</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="co">#&gt; # A tibble: 10 x 11</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="co">#&gt;    PlayerID Player_Name Team_Name Season Total_Goals Total_Apps Total_Mins</span></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;        &lt;int&gt;      &lt;int&gt;      &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5"><span class="co">#&gt;  1 24067    Lionel And… FC Barce… 2019-…           8          9        720</span></a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co">#&gt;  2 2092     Santigo Ca… Villarre… 2019-…           5         14       1107</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"><span class="co">#&gt;  3 138885   Mikel Oyar… Real Soc… 2019-…           4         15       1292</span></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co">#&gt;  4 50550    Fabian Ari… Eibar     2019-…           4         15       1281</span></a>
+<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="co">#&gt;  5 78907    Cristian P… Real Soc… 2019-…           4         14       1025</span></a>
+<a class="sourceLine" id="cb13-10" data-line-number="10"><span class="co">#&gt;  6 25358    Luka Modric Real Mad… 2019-…           2          9        555</span></a>
+<a class="sourceLine" id="cb13-11" data-line-number="11"><span class="co">#&gt;  7 123667   Martin Ode… Real Soc… 2019-…           2         13       1170</span></a>
+<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="co">#&gt;  8 115066   Ander Capa… Athletic… 2019-…           1         15       1333</span></a>
+<a class="sourceLine" id="cb13-13" data-line-number="13"><span class="co">#&gt;  9 138665   David Reme… Getafe    2019-…           1         11        880</span></a>
+<a class="sourceLine" id="cb13-14" data-line-number="14"><span class="co">#&gt; 10 27651    Ever Maxim… Sevilla   2019-…           1         15       1251</span></a>
+<a class="sourceLine" id="cb13-15" data-line-number="15"><span class="co">#&gt; # … with 4 more variables: Total_Shots &lt;int&gt;, Total_Shots_Target &lt;int&gt;,</span></a>
+<a class="sourceLine" id="cb13-16" data-line-number="16"><span class="co">#&gt; #   Total_Assists &lt;int&gt;, Total_Key_Passes &lt;int&gt;</span></a></code></pre></div>
+<p>As an additional feature of this function, we can request for <code>more_details = &quot;yes&quot;</code> to include additional stats in the the stat chart. These stats are not present in the API data, but instead separately calculated using the function.</p>
+<p>Here we request top stats for the EPL by goals, and getting more stats like mins per goal, goal conversion rate and shot accuracy.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">mytopstats</span>(<span class="dt">leagueID =</span> <span class="dv">1639</span>, <span class="dt">stat =</span> <span class="st">&quot;Goals&quot;</span>, <span class="dt">more_details =</span> <span class="st">&quot;yes&quot;</span>)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt; # A tibble: 10 x 16</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt;    PlayerID Player_Name Team_Name Season Total_Goals Total_Apps Total_Mins</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;        &lt;int&gt;      &lt;int&gt;      &lt;int&gt;</span></a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt;  1 90249    Jamie Vardy Leiceste… 2019-…          11         10        900</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="co">#&gt;  2 143781   Tammy Abra… Chelsea   2019-…          10         10        736</span></a>
+<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co">#&gt;  3 22770    Sergio Leo… Manchest… 2019-…           9          9        575</span></a>
+<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="co">#&gt;  4 99201    Sadio Mane  Liverpool 2019-…           8          9        773</span></a>
+<a class="sourceLine" id="cb14-9" data-line-number="9"><span class="co">#&gt;  5 64796    Pierre-Eme… Arsenal   2019-…           8         10        900</span></a>
+<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="co">#&gt;  6 84385    Raheem Ste… Manchest… 2019-…           7          9        792</span></a>
+<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="co">#&gt;  7 139273   Marcus Ras… Manchest… 2019-…           7         10        860</span></a>
+<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="co">#&gt;  8 69793    Harry Kane  Tottenha… 2019-…           7         10        895</span></a>
+<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="co">#&gt;  9 76898    Danny Ings  Southamp… 2019-…           6         10        578</span></a>
+<a class="sourceLine" id="cb14-14" data-line-number="14"><span class="co">#&gt; 10 100443   Mohamed Sa… Liverpool 2019-…           6          9        794</span></a>
+<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co">#&gt; # … with 9 more variables: Total_Shots &lt;int&gt;, Total_Shots_Target &lt;int&gt;,</span></a>
+<a class="sourceLine" id="cb14-16" data-line-number="16"><span class="co">#&gt; #   Total_Assists &lt;int&gt;, Total_Key_Passes &lt;int&gt;, Mins_Goal &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb14-17" data-line-number="17"><span class="co">#&gt; #   Goals_App &lt;dbl&gt;, Mins_Assist &lt;dbl&gt;, Goal_Conversion_Rate &lt;dbl&gt;,</span></a>
+<a class="sourceLine" id="cb14-18" data-line-number="18"><span class="co">#&gt; #   Shot_Accuracy &lt;dbl&gt;</span></a></code></pre></div>
+</div>
+</div>
+<div id="summary" class="section level2">
+<h2>Summary</h2>
+<p>The functions in the <code>footyr</code> package should help you to better extract data from the ISport API more easily. While they are not exhaustive, they should provide sufficient data for you to work with. Remember that you may obtain data about any league/cup around the world! Good luck!</p>
+<p>Note: If there are any problems/questions, do get in touch via my public Github account. Thank you.</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>iSports football API, ProgrammableWeb, <a href="https://www.programmableweb.com/api/isports-football" class="uri">https://www.programmableweb.com/api/isports-football</a>, accessed 26 Nov 2019<a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p>Ibid.<a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
