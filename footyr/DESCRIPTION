@@ -15,6 +15,7 @@ Imports:
     dplyr,
     httr,
     jsonlite,
+    magick,
     magrittr,
     stringr,
     tibble,
@@ -23,5 +24,6 @@ Imports:
 RoxygenNote: 6.1.1
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr

@@ -15,7 +15,8 @@ if this is only argument used. Required, no default value.}
 \item{player_name}{(string) A parameter where you input the name
 of the player whose data you want to view. This will output
 a dataframe containing data about the chosen player only,
-instead of displaying the entire squad info. Optional argument,
+instead of displaying the entire squad info. It will also
+output an image of the player. Optional argument,
 defaults to NA.}
 }
 \value{
@@ -32,7 +33,8 @@ full team list, squad numbers, players' birthdays and more. There
 is one additional, optional argument that will allow you to
 conduct a focussed search for an individual player within
 that squad, which is useful if you know which player in particular
-that you are searching for.
+that you are searching for. Also returns an image of the player,
+if the search for an individual player is conducted.
 }
 \examples{
 myplayer(19, "Mesut Ozil")

@@ -1,0 +1,23 @@
+"0","```r
+```r
+#Defining the base url to begin query.
+leagues_url <- str_c(\http://api.isportsapi.com/sport/football/league/basic?api_key=\, Sys.getenv(\ISPORT_KEY\))
+
+#Query
+leagues <- GET(leagues_url)
+
+#Checking the status of the query
+leagues$status_code
+
+#Parsing the output into a dataframe
+leagues1 <- fromJSON(toJSON(content(leagues)))
+leagues_df <- as.data.frame(leagues1) %>%
+  flatten() %>%
+  unnest(cols = c(data.leagueId, data.name, data.shortName, data.type, data.subLeagueName))
+leagues_df %>%
+  select(leagueId = data.leagueId, League_Name = data.name, 
+         League_Shortform = data.shortName, Sub_League_Name = data.subLeagueName)
+
+
+```
+```"

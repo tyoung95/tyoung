@@ -1,0 +1,6 @@
+"0","```r
+myteam(1134, \"Real Madrid\")
+
+```"
+"1","Calling http://api.isportsapi.com/sport/football/team?leagueId=1134&teamId=82&api_key=xEtVbN8zEFnioBkd
+"

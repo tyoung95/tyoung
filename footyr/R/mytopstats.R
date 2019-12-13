@@ -41,11 +41,17 @@ mytopstats <- function (leagueID, stat, more_details = "no") {
   call_url_top <- stringr::str_c(base_url, "topscorer?leagueId=",
                                  leagueID, "&api_key=", Sys.getenv("ISPORT_KEY"))
 
+  # Checking if the leagueID is entered as a numeric
+  if (is.numeric(leagueID) == FALSE) {
+    stop("Please check your leagueID, it must be of the form: Numeric")
+  }
+
   #Obtain DF for top scorers in league
   top_call <- httr::GET(call_url_top)
 
+  # Checking the query status
   if (top_call$status_code != 200) {
-    stop ("Error when calling API. Response: ", content(top_call))
+    stop ("Error when calling API. Please check your function arguments.")
   }
 
   top_df <- as.data.frame(jsonlite::fromJSON(jsonlite::toJSON(httr::content(top_call)))) %>%
@@ -63,8 +69,9 @@ mytopstats <- function (leagueID, stat, more_details = "no") {
 
   stats_call <- httr::GET(call_url_stats)
 
+  # Checking the query status
   if (stats_call$status_code != 200) {
-    stop ("Error when calling API. Response: ", content(stats_call))
+    stop ("Error when calling API. Please check your function arguments.")
   }
 
   stats_df <- as.data.frame(jsonlite::fromJSON(jsonlite::toJSON(httr::content(stats_call)))) %>%
@@ -132,8 +139,8 @@ mytopstats <- function (leagueID, stat, more_details = "no") {
       key_pass <- total_df %>%
         dplyr::arrange(dplyr::desc(Total_Key_Passes))
       print(head(key_pass, 10))
-    } else if (stat != c("Goals", "Shots", "Shots_on_Target", "Assists", "Key_Passes")) {
-      stop("You may have mistyped your query or it is not the list of available queries. Please try again.")
+    } else if (stat != "Goals" || "Shots" || "Shots_on_Target" || "Assists" || "Key_Passes"){
+      stop ("You may have mistyped your query or it is not the list of available queries. Please try again.")
     }
 
 
@@ -160,8 +167,10 @@ mytopstats <- function (leagueID, stat, more_details = "no") {
       key_pass <- total_df %>%
         dplyr::arrange(dplyr::desc(Total_Key_Passes))
       print(head(key_pass, 10))
-    } else if (stat != c("Goals", "Shots", "Shots_on_Target", "Assists", "Key_Passes")) {
+    } else if (stat != "Goals" || "Shots" || "Shots_on_Target" || "Assists" || "Key_Passes") {
       stop("You may have mistyped your query or it is not the list of available queries. Please try again.")
     }
+  } else {
+    stop("Your input for the past_results argument should either yes or no only, please change your response.")
   }
 }

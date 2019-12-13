@@ -1,0 +1,75 @@
+"0","```r
+myleague <- function(leagueId, table = \"no\") {
+  base_url <- \"http://api.isportsapi.com/sport/football/standing/league?leagueId=\"
+  call_url <- str_c(base_url, leagueId, \"&api_key=\", Sys.getenv(\"ISPORT_KEY\"))
+  message(\"Calling http://api.isportsapi.com/sport/football/standing/league?leagueId=\", leagueId, \"&api_key=YOUR_API_KEY\")
+  
+  req <- GET(call_url)
+  message(http_status(req))
+         
+  if (req$status_code != 200) {
+    stop (\"Error when calling API. Response: \", content(req))
+  }
+  
+  league_list <- fromJSON(toJSON(content(req)))
+  
+  if (table == \"yes\") {
+    league_df <- as.data.frame(league_list$data[1]) %>%
+    unnest(cols = c())
+    
+    league_df_final <- league_df %>% 
+      select(LeagueID = leagueInfo.leagueId, Name = leagueInfo.name, Abbreviation = leagueInfo.shortName, 
+             Total_Rounds = leagueInfo.totalRound, Current_Round = leagueInfo.currentRound, 
+             Current_Season = leagueInfo.currentSeason)
+    
+    team_info_df <- as.data.frame(league_list$data[3])
+    team_info_df <- team_info_df %>%
+      unnest(cols = c(teamInfos.teamId, teamInfos.name, teamInfos.logo, teamInfos.area)) %>%
+      select(totalStandings.teamId = teamInfos.teamId, teamInfos.name)
+    
+    standings_df <- as.data.frame(league_list$data[4]) %>%
+      unnest(cols = c(totalStandings.rank, totalStandings.teamId, totalStandings.winRate,
+                      totalStandings.drawRate, totalStandings.loseRate, totalStandings.winAverage, 
+                      totalStandings.loseAverage, totalStandings.deduction, 
+                      totalStandings.deductionExplain, totalStandings.recentFirstResult, 
+                      totalStandings.recentSecondResult,
+                      totalStandings.recentThirdResult, totalStandings.recentFourthResult,
+                      totalStandings.recentFifthResult, totalStandings.recentSixthResult, 
+                      totalStandings.color, totalStandings.red, totalStandings.totalCount, 
+                      totalStandings.winCount, totalStandings.drawCount, totalStandings.loseCount, 
+                      totalStandings.getScore, totalStandings.loseScore, totalStandings.goalDifference, 
+                      totalStandings.integral))
+    
+    league_table <- left_join(standings_df, team_info_df, by = \"totalStandings.teamId\")
+    
+    league_table <- league_table %>%
+      select(Rank = totalStandings.rank, Club = teamInfos.name, Matches_Played = totalStandings.totalCount, 
+             Points = totalStandings.integral, Wins = totalStandings.winCount, Losses = totalStandings.loseCount, 
+             Draws = totalStandings.drawCount, Goals_For = totalStandings.getScore, 
+             Goals_Against =totalStandings.loseScore, Goal_Diff = totalStandings.goalDifference)
+    
+    
+    print(league_df_final)
+    print(league_table)
+    
+    
+  } else if (table == \"no\") {
+    league_df <- as.data.frame(league_list$data[1]) %>%
+    flatten() %>%
+    unnest(cols = c())
+    
+    league_df_final <- league_df %>% 
+      select(LeagueID = leagueInfo.leagueId, Name = leagueInfo.name, Abbreviation = leagueInfo.shortName, 
+             Total_Rounds = leagueInfo.totalRound, Current_Round = leagueInfo.currentRound, 
+             Current_Season = leagueInfo.currentSeason)
+    
+    print(league_df_final)
+  }
+  
+}
+
+myleague(1639, \"yes\")
+```"
+"1","Calling http://api.isportsapi.com/sport/football/standing/league?leagueId=1639&api_key=YOUR_API_KEY
+SuccessOKSuccess: (200) OK
+"

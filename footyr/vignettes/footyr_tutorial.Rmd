@@ -51,7 +51,7 @@ library(footyr)
 ### Loading your API key
 Having registered online and received your API key, you need to then store your API key in your REnviron. This is important as you will not be able to perform calls to the API without the key, and as this key is unique to you, you would need to keep it secret, much like a password.
 
-**Important**: You should store your API key under the name "ISPORT_KEY". This is crucial as this package relies on this. 
+**Important**: *You should store your API key under the name "ISPORT_KEY". This is crucial as this package relies on this.* 
 ```{r, eval=FALSE}
 #Use this to set your API key, replacing "YOUR_API_KEY" with your actual key.
 Sys.setenv("ISPORT_KEY" = "YOUR_API_KEY")
@@ -85,12 +85,12 @@ myleague(leagueID = 1639)
 
 Let us also view the current league table for the EPL with the `table` argument.
 ```{r}
-myleague(leagueID = 1639, table = "yes")
+myleague(leagueID = 1639, table = "no")
 ```
 
 
 ### Retrieve football team information and past/future fixtures with `myteam()`
-This function that allows you to retrieve key statistics on a football team of your choice, including past results and future fixtures.
+This function that allows you to retrieve key statistics on a football team of your choice, including past results and future fixtures and club logo.
 
 Let us then retrieve information on Arsenal FC, using the arguments `leagueID = 1639` (Remember that ID 1639 corresponds to the EPL) and `team_name = "Arsenal"`
 ```{r}
@@ -117,16 +117,16 @@ Let us once again retrieve squad information on the team Arsenal, who play in th
 myplayer(teamID = 19)
 ```
 
-We can also search for a particular player in the Arsenal team, by using the second argument `player_name`, input the player name as a string in this second argument. This provides a singular response corresponding to the player you choose and containing information about that player. Here we look for the player called "Bernd Leno".
+We can also search for a particular player in the Arsenal team, by using the second argument `player_name`, input the player name as a string in this second argument. This provides a singular response corresponding to the player you choose and containing information about that player. Here we look for the player called "Mesut Ozil". You can also get a picture of the player in the Viewer tab of RStudio.
 ```{r}
-myplayer(teamID = 19, player_name = "Bernd Leno")
+myplayer(teamID = 19, player_name = "Mesut Ozil")
 ```
 
 
 ### Retrieve data and statistics of leagues' best players with `mytopstats()`
 This function that allows you to retrieve complete statistics of the top players within a league, including additional stats not natively from the ISports API.
 
-Looking once again at the EPL, we specify the `leagueID = 1639` and looking at players with the most goals, we specify `"Goals" in the second argument `stat`.
+Looking once again at the EPL, we specify the `leagueID = 1639` and looking at players with the most goals, we specify `"Goals"` in the second argument `stat`.
 ```{r}
 mytopstats(leagueID = 1639, stat = "Goals")
 ```

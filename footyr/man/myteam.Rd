@@ -13,7 +13,8 @@ function also in this package. Required, no default value.}
 
 \item{team_name}{(string) A parameter where you input the name
 of the team that you want to view. This will output a dataframe
-containing data about their chosen football club. Required, no
+containing data about their chosen football club. Also prints
+an image of the logo of the club. Required, no
 default value for this argument.}
 
 \item{past_results}{(string) A binary parameter taking values "yes" or "no".
@@ -36,7 +37,7 @@ future fixtures.
 }
 \details{
 This function pulls key statistics about a team, including
-founding date, manager name, stadium name and capacity. There
+founding date, manager name, stadium name and capacity and logo. There
 are two additional, optional arguments that will allow you to
 toggle if you would like to view past and/or future fixtures.
 You would be able to view the past 6 results from matches

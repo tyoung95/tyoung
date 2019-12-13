@@ -28,14 +28,20 @@
 myleague <- function(leagueID, table = "no") {
   base_url <- "http://api.isportsapi.com/sport/football/standing/league?leagueId="
   call_url <- stringr::str_c(base_url, leagueID, "&api_key=", Sys.getenv("ISPORT_KEY"))
-  message("Calling http://api.isportsapi.com/sport/football/standing/league?leagueId=", leagueID, "&api_key=YOUR_API_KEY")
+  message("Calling http://api.isportsapi.com/sport/football/standing/league?leagueId=", leagueID, "&api_key=", Sys.getenv("ISPORT_KEY"))
+
+  # Checking if the leagueID is entered as a numeric
+  if (is.numeric(leagueID) == FALSE) {
+    stop("Please check your leagueID, it must be of the form: Numeric")
+  }
 
   #Retrieving league data
   req <- httr::GET(call_url)
   message(httr::http_status(req))
 
+  # Checking the query status
   if (req$status_code != 200) {
-    stop ("Error when calling API. Response: ", httr::content(req))
+    stop ("Error when calling API. Please check your function arguments.")
   }
 
   league_list <- jsonlite::fromJSON(jsonlite::toJSON(httr::content(req)))
@@ -83,16 +89,19 @@ myleague <- function(leagueID, table = "no") {
 
 
   } else if (table == "no") {
+
     league_df <- as.data.frame(league_list$data[1]) %>%
-      jsonlite::flatten() %>%
       tidyr::unnest(cols = c())
 
     league_df_final <- league_df %>%
-      dplyr::select(LeagueID = leagueInfo.leagueId, Name = leagueInfo.name, Abbreviation = leagueInfo.shortName,
+      dplyr::select(LeagueID = leagueInfo.leagueId, Name = leagueInfo.name,
+                    Abbreviation = leagueInfo.shortName,
                     Total_Rounds = leagueInfo.totalRound, Current_Round = leagueInfo.currentRound,
                     Current_Season = leagueInfo.currentSeason)
 
     print(league_df_final)
+  } else {
+    stop("Your input for the table argument should either yes or no only, please change your response.")
   }
 
 }

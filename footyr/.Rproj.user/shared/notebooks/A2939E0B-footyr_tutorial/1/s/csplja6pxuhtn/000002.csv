@@ -1,0 +1,31 @@
+"0","knitr::opts_chunk$set(collapse = TRUE, comment = ""#>"")"
+"0","library(dplyr)"
+"2","
+Attaching package: ‘dplyr’
+
+"
+"2","The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+"
+"2","The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+"
+"0","library(tibble)"
+"0","library(jsonlite)"
+"0","library(magrittr)"
+"0","library(tidyr)"
+"2","
+Attaching package: ‘tidyr’
+
+"
+"2","The following object is masked from ‘package:magrittr’:
+
+    extract
+
+"
+"0","library(stringr)"
+"0","library(httr)"
